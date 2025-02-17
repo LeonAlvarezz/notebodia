@@ -21,7 +21,7 @@ services:
     ports:
       - 1234:5432
     volumes:
-      - my_movie_list-db:/var/lib/postgresql/data
+      - public-db:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}
