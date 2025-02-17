@@ -1,5 +1,6 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
+using notebodia_api.Db;
 using notebodia_api.Types;
 
 namespace notebodia_api.Repositories
@@ -7,11 +8,10 @@ namespace notebodia_api.Repositories
     public class NoteRepository
     {
 
-        private readonly IConfiguration _configuration;
-
-        public NoteRepository(IConfiguration configuration)
+        private readonly DapperDbContext _dbContext;
+        public NoteRepository(DapperDbContext dbContext)
         {
-            _configuration = configuration;
+            _dbContext = dbContext;
         }
 
 
@@ -19,7 +19,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 SELECT * FROM Notes
                 WHERE user_id = @UserId
@@ -40,7 +40,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 SELECT * FROM Notes
                 WHERE id = @NoteId
@@ -58,7 +58,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 SELECT * FROM Notes
                 """;
@@ -75,7 +75,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 INSERT INTO Notes(user_id, title, content)
                 Output INSERTED.id, INSERTED.user_id, INSERTED.title, INSERTED.content, INSERTED.updated_at, INSERTED.created_at, INSERTED.published_at
@@ -98,7 +98,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 Update Notes
                 SET title = @Title, content = @content, updated_at = @UpdatedAt
@@ -124,7 +124,7 @@ namespace notebodia_api.Repositories
         {
             try
             {
-                var connection = GetConnection();
+                var connection = _dbContext.GetConnection();
                 var sql = """
                 DELETE FROM Notes WHERE id = @NoteId
                 """;
@@ -138,10 +138,6 @@ namespace notebodia_api.Repositories
             {
                 throw new ApplicationException("Failed to Update Note", ex);
             }
-        }
-        private SqlConnection GetConnection()
-        {
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }
