@@ -6,20 +6,22 @@ using notebodia_api.Response;
 using notebodia_api.Models;
 using notebodia_api.Types;
 using notebodia_api.Util;
+using notebodia_api.Db;
 
 namespace notebodia_api.Repositories
 {
     public class UserRepository
     {
-        private readonly IConfiguration _configuration;
-        public UserRepository(IConfiguration configuration)
+        // private readonly IConfiguration _configuration;
+        private readonly DapperDbContext _dbContext;
+        public UserRepository(DapperDbContext dbContext)
         {
-            _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         public async Task<List<User>> GetAllUsers()
         {
-            using var connection = GetConnection();
+            using var connection = _dbContext.GetConnection();
             var users = await connection.QueryAsync<User>(
                 """
                 SELECT * FROM Users
@@ -31,7 +33,7 @@ namespace notebodia_api.Repositories
 
         public async Task<User> GetUserById(Guid id)
         {
-            using var connection = GetConnection();
+            using var connection = _dbContext.GetConnection();
             var sql = """
                 SELECT u.* FROM Users u  WHERE id = @id
                 """;
@@ -46,7 +48,7 @@ namespace notebodia_api.Repositories
 
         public async Task<UserDto> UserSignup(CreateUserPayload payload)
         {
-            using var connection = GetConnection();
+            using var connection = _dbContext.GetConnection();
             var sql = """
         INSERT INTO Users (username, password, email)
         OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.created_at, INSERTED.updated_at
@@ -84,7 +86,7 @@ namespace notebodia_api.Repositories
         }
         public async Task<User> CheckEmailAndUsername(string Username, string Email)
         {
-            using var connection = GetConnection();
+            using var connection = _dbContext.GetConnection();
             var sql =
             """
             SELECT * FROM Users WHERE username = @Username AND email = @Email
@@ -104,10 +106,10 @@ namespace notebodia_api.Repositories
                 throw new ApplicationException("Failed to fetch user", ex);
             }
         }
-        private SqlConnection GetConnection()
-        {
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        }
+        // private SqlConnection GetConnection()
+        // {
+        //     return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        // }
 
 
     }
