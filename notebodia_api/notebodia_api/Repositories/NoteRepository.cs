@@ -1,0 +1,147 @@
+using Dapper;
+using Microsoft.Data.SqlClient;
+using notebodia_api.Types;
+
+namespace notebodia_api.Repositories
+{
+    public class NoteRepository
+    {
+
+        private readonly IConfiguration _configuration;
+
+        public NoteRepository(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
+        public async Task<List<Note>> GetAllById(Guid UserId, string? keyword)
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                SELECT * FROM Notes
+                WHERE user_id = @UserId
+                AND (@title IS NULL OR title LIKE @title)
+                """;
+                var parameters = new { UserId, title = keyword != null ? $"%{keyword}%" : null };
+
+                var notes = await connection.QueryAsync<Note>(sql, parameters);
+                return notes.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Fetch Note", ex);
+            }
+        }
+
+        public async Task<Note> GetById(Guid NoteId)
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                SELECT * FROM Notes
+                WHERE id = @NoteId
+                """;
+                var note = await connection.QueryFirstOrDefaultAsync<Note>(sql, new { NoteId });
+                return note;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Fetch Note", ex);
+            }
+        }
+
+        public async Task<List<Note>> GetAllAsync()
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                SELECT * FROM Notes
+                """;
+                var notes = await connection.QueryAsync<Note>(sql);
+                return notes.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Fetch Note", ex);
+            }
+        }
+
+        public async Task<Note> CreateAsync(Guid UserId, CreateNotePayload payload)
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                INSERT INTO Notes(user_id, title, content)
+                Output INSERTED.id, INSERTED.user_id, INSERTED.title, INSERTED.content, INSERTED.updated_at, INSERTED.created_at, INSERTED.published_at
+                VALUES (@UserId, @Title, @Content)
+                """;
+                var note = await connection.QueryFirstAsync<Note>(sql, new
+                {
+                    UserId,
+                    payload.Title,
+                    payload.Content,
+                });
+                return note;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Fetch Note", ex);
+            }
+        }
+        public async Task<Note> UpdateAsync(Guid NoteId, CreateNotePayload payload)
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                Update Notes
+                SET title = @Title, content = @content, updated_at = @UpdatedAt
+                Output INSERTED.id, INSERTED.user_id, INSERTED.title, INSERTED.content, INSERTED.updated_at, INSERTED.created_at, INSERTED.published_at
+                WHERE id = @NoteId;
+                """;
+                var note = await connection.QueryFirstAsync<Note>(sql, new
+                {
+                    payload.Title,
+                    payload.Content,
+                    UpdatedAt = DateTime.Now,
+                    NoteId,
+                });
+                return note;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Update Note", ex);
+            }
+        }
+
+        public async Task<bool> DeleteAsync(Guid NoteId)
+        {
+            try
+            {
+                var connection = GetConnection();
+                var sql = """
+                DELETE FROM Notes WHERE id = @NoteId
+                """;
+                var rowsAffected = await connection.ExecuteAsync(sql, new
+                {
+                    NoteId,
+                });
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to Update Note", ex);
+            }
+        }
+        private SqlConnection GetConnection()
+        {
+            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        }
+    }
+}
