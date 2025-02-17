@@ -19,7 +19,7 @@ services:
   db:
     image: postgres:17.3
     ports:
-      - 3306:5432
+      - 1234:5432
     volumes:
       - my_movie_list-db:/var/lib/postgresql/data
     environment:
