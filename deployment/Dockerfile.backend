@@ -6,10 +6,18 @@ EXPOSE 8080
 # Build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["notebodia_api/notebodia_api/notebodia_api.csproj", "notebodia_api/"]
+
+# Copy the project file and restore dependencies
+COPY ["notebodia_api/notebodia_api/notebodia_api.csproj", "notebodia_api/notebodia_api/"]
 RUN dotnet restore "notebodia_api/notebodia_api/notebodia_api.csproj"
+
+# Copy the rest of the application code
 COPY . .
-WORKDIR "/src/notebodia_api"
+
+# Set the working directory to the project folder
+WORKDIR "/src/notebodia_api/notebodia_api"
+
+# Build the application
 RUN dotnet build "notebodia_api.csproj" -c Release -o /app/build
 
 # Publish the application
