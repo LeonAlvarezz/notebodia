@@ -12,6 +12,7 @@
     <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
     <PackageReference Include="FluentDateTime" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
