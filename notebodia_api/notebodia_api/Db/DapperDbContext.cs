@@ -1,5 +1,5 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 
 namespace notebodia_api.Db
 {
@@ -15,7 +15,7 @@ namespace notebodia_api.Db
         {
             if (_connection == null || _connection.State != ConnectionState.Open)
             {
-                _connection = new SqlConnection(_connectionString);
+                _connection = new NpgsqlConnection(_connectionString);
                 _connection.Open();
             }
             return _connection;
