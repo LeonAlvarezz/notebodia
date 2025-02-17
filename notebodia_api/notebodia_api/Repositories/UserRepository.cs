@@ -51,8 +51,8 @@ namespace notebodia_api.Repositories
             using var connection = _dbContext.GetConnection();
             var sql = """
         INSERT INTO Users (username, password, email)
-        OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.created_at, INSERTED.updated_at
         VALUES (@Username, @Password, @Email)
+        RETURNING id, username, email, created_at, updated_at
         """;
 
             try

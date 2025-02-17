@@ -78,8 +78,8 @@ namespace notebodia_api.Repositories
                 var connection = _dbContext.GetConnection();
                 var sql = """
                 INSERT INTO Notes(user_id, title, content)
-                Output INSERTED.id, INSERTED.user_id, INSERTED.title, INSERTED.content, INSERTED.updated_at, INSERTED.created_at, INSERTED.published_at
                 VALUES (@UserId, @Title, @Content)
+                RETURNING id, user_id, title, content, updated_at, created_at, published_at
                 """;
                 var note = await connection.QueryFirstAsync<Note>(sql, new
                 {
@@ -102,8 +102,8 @@ namespace notebodia_api.Repositories
                 var sql = """
                 Update Notes
                 SET title = @Title, content = @content, updated_at = @UpdatedAt
-                Output INSERTED.id, INSERTED.user_id, INSERTED.title, INSERTED.content, INSERTED.updated_at, INSERTED.created_at, INSERTED.published_at
                 WHERE id = @NoteId;
+                RETURNING id, user_id, title, content, updated_at, created_at, published_at
                 """;
                 var note = await connection.QueryFirstAsync<Note>(sql, new
                 {

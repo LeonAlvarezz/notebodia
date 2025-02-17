@@ -6,19 +6,20 @@ using notebodia_api.Response;
 using notebodia_api.Models;
 using notebodia_api.Types;
 using notebodia_api.Util;
+using notebodia_api.Db;
 
 namespace notebodia_api.Repositories
 {
     public class SessionRepository
     {
-        private readonly IConfiguration _configuration;
-        public SessionRepository(IConfiguration configuration)
+        private readonly DapperDbContext _dbContext;
+        public SessionRepository(DapperDbContext dbContext)
         {
-            _configuration = configuration;
+            _dbContext = dbContext;
         }
         public async Task<Session> GetSessionByIdAsync(Guid id)
         {
-            var connection = GetConnection();
+            var connection = _dbContext.GetConnection();
             var sql = @"
             SELECT s.*, u.*
             FROM Sessions s
@@ -40,11 +41,11 @@ namespace notebodia_api.Repositories
 
         public async Task<Session> CreateSessionAsync(Session payload)
         {
-            var connection = GetConnection();
+            var connection = _dbContext.GetConnection();
             var sql = """
             INSERT INTO Sessions (id, user_id, expires_at) 
-            OUTPUT INSERTED.id, INSERTED.user_id, INSERTED.expires_at, INSERTED.created_at
             VALUES (@Id, @UserId, @ExpiresAt)
+            RETURNING id, user_id, expires_at, created_at
             """;
             try
             {
@@ -67,7 +68,7 @@ namespace notebodia_api.Repositories
 
         public async Task<bool> DeleteSessionAsync(Guid Id)
         {
-            var connection = GetConnection();
+            var connection = _dbContext.GetConnection();
             var sql = """
             DELETE FROM Sessions WHERE id = @id
             """;
@@ -82,11 +83,5 @@ namespace notebodia_api.Repositories
                 throw new ApplicationException("Failed to delete session", ex);
             }
         }
-        private SqlConnection GetConnection()
-        {
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        }
-
-
     }
 }
