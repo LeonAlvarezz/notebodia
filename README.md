@@ -1,5 +1,6 @@
 # Notebodia
 **Notebodia** is demo application demonstrated an application built using Vue + Vite as frontend; ASP.NET Core Web API. It allows user to create, update, delete, view note fast and efficient.
+- **Techstack**: Vue, Vite, .NET Core Web Api, Dapper, SQL Server
 
 # Feature
 **Notebodia** has the following features: 
