@@ -28,11 +28,7 @@ import { deleteNote } from '@/api/note'
 import { toast } from '@/composables/toast'
 import { inject, ref, type Ref } from 'vue'
 const dialog = useDialog()
-const showModal: Ref<boolean, boolean> = inject('showModal', ref(false))
-const selectedNote: Ref<Note | undefined, Note | undefined> = inject(
-    'showModal',
-    ref<Note>()
-)
+const onView: (note: Note) => void = inject('onView', () => {})
 
 const options: MenuOption[] = [
     {
@@ -83,8 +79,7 @@ const handleSelect = (value: string) => {
             })
             break
         case 'edit':
-            selectedNote.value = props.note
-            showModal.value = true
+            onView(props.note)
             break
     }
 }

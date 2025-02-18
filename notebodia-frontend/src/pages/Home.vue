@@ -137,8 +137,7 @@ watch(route, async () => {
     await fetchNotes()
 })
 
-provide('showModal', showModal)
-provide('selectedNote', selectedNote)
+provide('onView', onView)
 </script>
 
 <style scoped></style>
