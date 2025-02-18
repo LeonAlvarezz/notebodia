@@ -38,11 +38,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
+    var allowedOrigins = builder.Configuration.GetSection("AllowedCorsOrigins").Get<string[]>();
     options.AddPolicy(name: "AllowSpecificOrigin",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5173",
-                                              "http://192.168.18.16:5173").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                          policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                       });
 });
 
