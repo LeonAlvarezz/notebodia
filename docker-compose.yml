@@ -14,21 +14,20 @@ services:
       - AllowedCorsOrigins=${FRONTEND_URL}
     networks:
       - app-network
-    depends_on:
-      - db  # If your backend depends on a database
+   
 
-  db:
-    image: postgres:17.3
-    ports:
-      - "${DB_PORT:-5433}:5432"
-    volumes:
-      - public-db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_DB=${DB_NAME}
-    networks:
-      -  app-network
+  # db:
+  #   image: postgres:17.3
+  #   ports:
+  #     - "${DB_PORT:-5433}:5432"
+  #   volumes:
+  #     - public-db:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_DB=${DB_NAME}
+  #   networks:
+  #     -  app-network
 
 networks:
   app-network:
