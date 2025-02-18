@@ -34,6 +34,11 @@ builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = Status307TemporaryRedirect;
+    options.HttpsPort = 5001;
+});
 
 
 builder.Services.AddCors(options =>
