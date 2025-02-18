@@ -33,11 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { inject, ref, watch } from 'vue'
 import type { CreateNewNote, Note } from '@/types/note.type'
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
 import { createNote, updateNote } from '@/api/note'
 import { toast } from '@/composables/toast'
+const onClear: () => void = inject('onClear', () => {})
 const props = defineProps<{
     show: boolean
     note?: Note
@@ -97,7 +98,6 @@ const onSubmit = async () => {
                 type: 'success',
             })
             emit('revalidate')
-            payload.value = { ...defaultValue }
             closeModal()
         } catch (error: any) {
         } finally {
@@ -106,6 +106,9 @@ const onSubmit = async () => {
     })
 }
 const closeModal = () => {
+    onClear()
+    payload.value = { ...defaultValue }
+
     emit('update:show', false)
 }
 
