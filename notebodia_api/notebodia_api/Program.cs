@@ -37,7 +37,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpsRedirection(options =>
 {
     options.RedirectStatusCode = Status307TemporaryRedirect;
-    options.HttpsPort = 5001;
+    options.HttpsPort = 443;
 });
 
 
