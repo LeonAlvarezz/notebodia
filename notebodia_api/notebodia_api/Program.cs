@@ -60,8 +60,19 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Required for HTTPS
         options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin
-        options.Cookie.Domain = ".sator-tech.live"; // Allows subdomains to access the cookie
-        options.LoginPath = "/api/auth/login";
+        options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin cookies
+
+        if (isDevelopment)
+        {
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Allow HTTP (for localhost)
+            options.Cookie.Domain = null; // No domain restriction (localhost does not support domains)
+        }
+        else
+        {
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Require HTTPS
+            options.Cookie.Domain = ".sator-tech.live"; // Allow cross-subdomain in production
+        }
+
     });
 builder.Services.AddAuthorization();
 
