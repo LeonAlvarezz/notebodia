@@ -51,12 +51,16 @@ builder.Services.AddCors(options =>
                       });
 });
 
-services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.HttpOnly = true;
-});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "session_token";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Required for HTTPS
+        options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin
+        options.Cookie.Domain = ".sator-tech.live"; // Allows subdomains to access the cookie
+        options.LoginPath = "/api/auth/login";
+    });
 
 
 var app = builder.Build();
@@ -71,7 +75,7 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 app.UseMiddleware<GlobalErrorMiddleware>();
-// app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 app.UseCors("AllowSpecificOrigin");
