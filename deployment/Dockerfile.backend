@@ -2,6 +2,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
+ARG FRONTEND_URL
+ENV FRONTEND=${FRONTEND_URL}
 
 # Build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
