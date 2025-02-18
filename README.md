@@ -39,4 +39,7 @@ In Development, you can use `watch` for hot reload
 ```
 dotnet watch
 ```
+## DEMO
+Due to my current cloud service limitation (linux/arm64), I was not able to self host SQL Server, so I opted for Postgres instead. The project also used the latest tailwind which currently doesn't support linux cpu architecture. So for now Vercel for frontend, Self-hosted Coolify for backend, Postgres for backend is the deployment util.
 
+Demo available at: [https://notebodia.frontend.sator-tech.live](https://notebodia.frontend.sator-tech.live)
