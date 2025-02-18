@@ -62,9 +62,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseMiddleware<GlobalErrorMiddleware>();
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 app.UseCors("AllowSpecificOrigin");
