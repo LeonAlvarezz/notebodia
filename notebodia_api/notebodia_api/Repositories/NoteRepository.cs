@@ -102,7 +102,7 @@ namespace notebodia_api.Repositories
                 var sql = """
                 Update Notes
                 SET title = @Title, content = @content, updated_at = @UpdatedAt
-                WHERE id = @NoteId;
+                WHERE id = @NoteId
                 RETURNING id, user_id, title, content, updated_at, created_at, published_at
                 """;
                 var note = await connection.QueryFirstAsync<Note>(sql, new
