@@ -11,7 +11,7 @@ namespace notebodia_api.Util
                 HttpOnly = true,  // Prevents JavaScript access (security)
                 Secure = true,    // Ensures the cookie is sent only over HTTPS (enable in production)
                 SameSite = SameSiteMode.None, // Protects against CSRF attacks
-                Domain = ".sator-tech.live" // Allow subdomains to access the cookie
+                Domain = ".sator-tech.live", // Allow subdomains to access the cookie
                 Expires = DateTime.UtcNow.AddDays(day)
             });
         }

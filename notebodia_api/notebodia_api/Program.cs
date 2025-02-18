@@ -63,6 +63,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Domain = ".sator-tech.live"; // Allows subdomains to access the cookie
         options.LoginPath = "/api/auth/login";
     });
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
@@ -78,6 +79,8 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 app.UseMiddleware<GlobalErrorMiddleware>();
 app.UseAuthorization();
+app.UseAuthentication();
+
 
 app.MapControllers();
 app.UseCors("AllowSpecificOrigin");
