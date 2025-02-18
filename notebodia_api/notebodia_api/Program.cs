@@ -51,6 +51,13 @@ builder.Services.AddCors(options =>
                       });
 });
 
+services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
+
 
 var app = builder.Build();
 
