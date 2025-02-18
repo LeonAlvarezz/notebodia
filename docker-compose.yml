@@ -10,6 +10,7 @@ services:
       - VITE_API_URL=${VITE_API_URL}
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=${HOST};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - ALLOWED_CORS_ORIGINS=${FRONTEND_URL}
     networks:
       - app-network
     depends_on:
