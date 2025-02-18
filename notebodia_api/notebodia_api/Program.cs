@@ -3,6 +3,8 @@ using notebodia_api.Repositories;
 using notebodia_api.Services;
 using Dapper;
 using notebodia_api.Db;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 
 DefaultTypeMap.MatchNamesWithUnderscores = true;
