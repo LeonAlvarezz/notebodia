@@ -23,23 +23,23 @@ const router = createRouter({
     routes,
 })
 
-// router.beforeEach(async (to, _, next) => {
-//     const authStore = useAuthStore()
-//     const userInfo = authStore.user || (await authStore.getUser())
-//     console.log('userInfo:', userInfo)
-//     if (to.path === LOGIN_PATH && authStore.isAuthenticated) {
-//         next({
-//             path: HOME_PATH,
-//         })
-//         return
-//     }
-//     if (to.matched.some((record) => record.meta.requiresAuth)) {
-//         if (!authStore.isAuthenticated)
-//             next({ path: LOGIN_PATH, query: { nextUrl: to.fullPath } })
-//         else next()
-//     } else {
-//         next()
-//     }
-// })
+router.beforeEach(async (to, _, next) => {
+    const authStore = useAuthStore()
+    const userInfo = authStore.user || (await authStore.getUser())
+    console.log('userInfo:', userInfo)
+    if (to.path === LOGIN_PATH && authStore.isAuthenticated) {
+        next({
+            path: HOME_PATH,
+        })
+        return
+    }
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (!authStore.isAuthenticated)
+            next({ path: LOGIN_PATH, query: { nextUrl: to.fullPath } })
+        else next()
+    } else {
+        next()
+    }
+})
 
 export default router

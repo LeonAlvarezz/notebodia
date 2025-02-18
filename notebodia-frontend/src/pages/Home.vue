@@ -102,41 +102,19 @@ const onClear = () => {
     selectedNote.value = undefined
 }
 async function fetchNotes() {
-    // loading.value = true
-    // try {
-    //     const { data, error } = await getUserNote(filters)
-    //     if (error) {
-    //         toast(`Failed To Fetch Notes: ${error.message}`, {
-    //             type: 'error',
-    //         })
-    //     }
-    //     notes.value = data!
-    // } catch (error) {
-    // } finally {
-    //     loading.value = false
-    // }
-    notes.value = [
-        {
-            id: 'sasd',
-            userId: 'sads',
-            title: 'asdsadasdasda',
-            content: 'sdasdasdkasjdkljaskldjksljdklsjdkljskdjskldjklsajdklasd',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            publishedAt: new Date(),
-        },
-
-        {
-            id: 'sasd',
-            userId: 'sads',
-            title: 'Note 2',
-            content:
-                'sadsjdkljasdiasjlkdjkasjdiowjd8w8jdiowjadlwjdklasjldsajdlajdklnajskldajlksdnjaklsjdklasdklas',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            publishedAt: new Date(),
-        },
-    ]
+    loading.value = true
+    try {
+        const { data, error } = await getUserNote(filters)
+        if (error) {
+            toast(`Failed To Fetch Notes: ${error.message}`, {
+                type: 'error',
+            })
+        }
+        notes.value = data!
+    } catch (error) {
+    } finally {
+        loading.value = false
+    }
 }
 onMounted(async () => {
     await fetchNotes()
