@@ -53,8 +53,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-
-var app = builder.Build();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -62,23 +60,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Required for HTTPS
         options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin
-        options.Cookie.SameSite = SameSiteMode.None; // Required for cross-origin cookies
-
-        if (app.Environment.IsDevelopment())
-        {
-            options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Allow HTTP (for localhost)
-            options.Cookie.Domain = null; // No domain restriction (localhost does not support domains)
-        }
-        else
-        {
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Require HTTPS
-            options.Cookie.Domain = ".sator-tech.live"; // Allow cross-subdomain in production
-        }
-
+        options.Cookie.Domain = ".sator-tech.live"; // Allows subdomains to access the cookie
+        options.LoginPath = "/api/auth/login";
     });
 builder.Services.AddAuthorization();
 
 
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
