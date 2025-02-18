@@ -26,7 +26,7 @@ import { renderIcon } from '@/util/render'
 import type { Note } from '@/types/note.type'
 import { deleteNote } from '@/api/note'
 import { toast } from '@/composables/toast'
-import { inject, ref, type Ref } from 'vue'
+import { inject } from 'vue'
 const dialog = useDialog()
 const onView: (note: Note) => void = inject('onView', () => {})
 
